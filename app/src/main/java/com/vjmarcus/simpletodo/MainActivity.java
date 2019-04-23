@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        readItems();
         mEditText = (EditText) findViewById(R.id.editText_new_item);
 
         listView = (ListView) findViewById(R.id.listview);
@@ -41,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter = new ArrayAdapter<>(MainActivity.this,
                 R.layout.support_simple_spinner_dropdown_item, items);
         listView.setAdapter(itemAdapter);
-        for (int i = 0; i < 40; i++) {
-            items.add(i + " item");
-        }
-        // setupListViewListener();
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -58,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         // User clicked OK button
                         items.remove(position);
                         itemAdapter.notifyDataSetChanged();
+                        writeItems();
                         Toast.makeText(MainActivity.this, "Deleated", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -87,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     mEditText.setText("");
                     itemAdapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "Добавлено", Toast.LENGTH_SHORT).show();
+                    writeItems();
                 }
 
 
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
             items = new ArrayList<String>();
+            Log.v(TAG, e.toString());
         }
     }
 
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             FileUtils.writeLines(todoFile, items);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.v(TAG, e.toString());
         }
     }
 
