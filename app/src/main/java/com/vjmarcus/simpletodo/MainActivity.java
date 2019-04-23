@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     EditText mEditText;
     private static final String TAG = "MyApp";
+    String mUserText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +79,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "Button mButton PUSH");
-                items.add(mEditText.getText().toString());
-                mEditText.setText("");
-                itemAdapter.notifyDataSetChanged();
+                mUserText = mEditText.getText().toString();
+                if (TextUtils.isEmpty(mUserText)) {
+                    mEditText.setError("Поле не заполнено!");
+                } else {
+                    items.add(mEditText.getText().toString());
+                    mEditText.setText("");
+                    itemAdapter.notifyDataSetChanged();
+                    Toast.makeText(MainActivity.this, "Добавлено", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
         });
-
-
     }
+
+    private void readItems() {
+        File fileDir = getFilesDir();
+        Log.v(TAG, "read items - " + fileDir.toString());
+        File todoFile = new File(fileDir, "todo.txt");
+
+        try {
+            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+            items = new ArrayList<String>();
+        }
+    }
+
+    private void writeItems() {
+        File fileDir = getFilesDir();
+        Log.v(TAG, "write items - " + fileDir.toString());
+        File todoFile = new File(fileDir, "todo.txt");
+        try {
+            FileUtils.writeLines(todoFile, items);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
