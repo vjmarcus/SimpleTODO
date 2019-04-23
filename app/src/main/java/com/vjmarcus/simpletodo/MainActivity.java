@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
             items.add(i + " item");
         }
        // setupListViewListener();
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                items.remove(position);
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this, "Deleated", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
         mButton = (Button)findViewById(R.id.button_add_item);
         mButton.setOnClickListener(new View.OnClickListener() {
