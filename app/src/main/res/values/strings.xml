@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Simple TO DO</string>
+    <string name="button_add_title">ADD ITEM</string>
+    <string name="edittext_new_item_hint">Add new item here:</string>
 </resources>
