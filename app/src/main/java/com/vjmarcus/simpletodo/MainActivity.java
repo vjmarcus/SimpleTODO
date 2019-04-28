@@ -1,5 +1,6 @@
 package com.vjmarcus.simpletodo;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +17,13 @@ import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,16 +35,19 @@ public class MainActivity extends AppCompatActivity {
     EditText mEditText;
     private static final String TAG = "MyApp";
     String mUserText;
+    FileOutputStream mFileOutputStream = null;
+    FileInputStream mFileInputStream = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        readItems();
+
         mEditText = (EditText) findViewById(R.id.editText_new_item);
 
         listView = (ListView) findViewById(R.id.listview);
         items = new ArrayList<>();
+        readItems();
         itemAdapter = new ArrayAdapter<>(MainActivity.this,
                 R.layout.support_simple_spinner_dropdown_item, items);
         listView.setAdapter(itemAdapter);
@@ -83,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     items.add(mEditText.getText().toString());
                     mEditText.setText("");
+                    writeItems();
                     itemAdapter.notifyDataSetChanged();
                     Toast.makeText(MainActivity.this, "Добавлено", Toast.LENGTH_SHORT).show();
-                    writeItems();
                 }
 
 
@@ -93,31 +102,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void readItems() {
-        File fileDir = getFilesDir();
-        Log.v(TAG, "read items - " + fileDir.toString());
-        File todoFile = new File(fileDir, "todo.txt");
+    void readItems() {
 
+        File filesDir = getFilesDir();
+        File file = new File(filesDir, "newToDo.txt");
         try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+            items = new ArrayList<String>(FileUtils.readLines(file));
+            Log.v(TAG, "readItems worked");
         } catch (IOException e) {
-            e.printStackTrace();
             items = new ArrayList<String>();
-            Log.v(TAG, e.toString());
+            Log.v(TAG, "readItems ERROR" + e.toString());
         }
+
+
     }
+
 
     private void writeItems() {
-        File fileDir = getFilesDir();
-        Log.v(TAG, "write items - " + fileDir.toString());
-        File todoFile = new File(fileDir, "todo.txt");
+        File filesDir = getFilesDir();
+        File file = new File(filesDir, "newToDo.txt");
         try {
-            FileUtils.writeLines(todoFile, items);
+            FileUtils.writeLines(file, items);
+            Log.v(TAG, "writeItems worked");
         } catch (IOException e) {
             e.printStackTrace();
-            Log.v(TAG, e.toString());
+            Log.v(TAG, "writeItems ERROR");
         }
-    }
 
+    }
 
 }
