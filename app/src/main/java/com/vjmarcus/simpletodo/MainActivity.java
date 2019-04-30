@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Log.v(TAG, "readItems worked");
         } catch (IOException e) {
             items = new ArrayList<String>();
-            Log.v(TAG, "readItems ERROR" + e.toString());
+            Log.v(TAG, "readItems ERROR  - " + e.toString());
         }
 
 
