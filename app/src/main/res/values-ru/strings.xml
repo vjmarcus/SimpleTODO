@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Простой TO DO</string>
+    <string name="app_name">TODO Лист</string>
     <string name="button_add_title">ДОБАВИТЬ</string>
     <string name="edittext_new_item_hint">Добавьте новую задачу сюда:</string>
     <string name="dialog_message">Удалить?</string>
